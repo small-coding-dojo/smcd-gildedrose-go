@@ -1,15 +1,19 @@
 package main
 
-import "testing"
+import (
+	"testing"
 
-func Test_Foo(t *testing.T) {
+	"github.com/stretchr/testify/assert"
+)
+
+func Test_Positive_SellIn_reduces_quality_by_one(t *testing.T) {
 	var items = []*Item{
-		&Item{"foo", 0, 0},
+		&Item{"foo", 10, 100},
 	}
-
+	var expected = []*Item{
+		&Item{"foo", 9, 99},
+	}
 	UpdateQuality(items)
 
-	if items[0].name != "fixme" {
-		t.Errorf("Name: Expected %s but got %s ", "fixme", items[0].name)
-	}
+	assert.Equal(t, expected, items)
 }
