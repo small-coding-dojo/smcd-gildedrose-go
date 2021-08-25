@@ -7,60 +7,94 @@ type Item struct {
 	sellIn, quality int
 }
 
+const standardQualityChange = 1
+
 func UpdateQuality(items []*Item) {
 	for i := 0; i < len(items); i++ {
 
-		standardQualityChange := 1
-		aging := 0
+		currentItem := items[i]
 
-		if items[i].name != "Aged Brie" && items[i].name != "Backstage passes to a TAFKAL80ETC concert" {
-			if items[i].quality > 0 {
-				if items[i].name == "Conjured Mana Cake" {
-					items[i].quality -= 2
-				} else if items[i].name != "Sulfuras, Hand of Ragnaros" {
-					items[i].quality -= standardQualityChange
-				}
-			}
+		if currentItem.name == "Aged Brie" {
+			qualityChangesForAgedBrie(currentItem)
+		} else if currentItem.name == "Backstage passes to a TAFKAL80ETC concert" {
+			qualityChangesForBackstagePasses(currentItem)
+		} else if currentItem.name == "Conjured Mana Cake" {
+			qualityChangesForConjuredItems(currentItem)
+		} else if currentItem.name == "Sulfuras, Hand of Ragnaros" {
+			qualityChangesForLegendaryItems(currentItem)
 		} else {
-			items[i].quality += standardQualityChange
-			if items[i].name == "Backstage passes to a TAFKAL80ETC concert" {
-				if items[i].sellIn < 11 {
-					items[i].quality += standardQualityChange
-				}
-				if items[i].sellIn < 6 {
-					items[i].quality += standardQualityChange
+			qualityChangesForNormalItems(currentItem)
+		}
+
+		if currentItem.sellIn <= 0 {
+			if currentItem.name == "Aged Brie" {
+				// this is left blank intentionally, due to refactoring
+			} else if currentItem.name == "Backstage passes to a TAFKAL80ETC concert" {
+				currentItem.quality = 0
+			} else if currentItem.quality > 0 {
+				if currentItem.name == "Conjured Mana Cake" {
+					currentItem.quality -= 2
+				} else if currentItem.name != "Sulfuras, Hand of Ragnaros" {
+					currentItem.quality -= standardQualityChange
 				}
 			}
 		}
 
-		items[i].quality += aging
-
-		if items[i].name != "Sulfuras, Hand of Ragnaros" {
-			items[i].sellIn -= 1
+		if currentItem.name != "Sulfuras, Hand of Ragnaros" {
+			currentItem.quality = capToMaxStandardQuality(currentItem.quality)
 		}
 
-		if items[i].sellIn < 0 {
-			if items[i].name != "Aged Brie" {
-				if items[i].name != "Backstage passes to a TAFKAL80ETC concert" {
-					if items[i].quality > 0 {
-						if items[i].name == "Conjured Mana Cake" {
-							items[i].quality -= 2
-						} else if items[i].name != "Sulfuras, Hand of Ragnaros" {
-							items[i].quality -= standardQualityChange
-						}
-					}
-				} else {
-					items[i].quality = 0
-				}
-			} else {
-				items[i].quality += standardQualityChange
-			}
+		// letTimePassBy
+		if currentItem.name == "Sulfuras, Hand of Ragnaros" {
+			agingForLegendaryItems(currentItem)
+		} else {
+			agingForNonLegendaryItems(currentItem)
 		}
 
-		if items[i].name != "Sulfuras, Hand of Ragnaros" {
-			items[i].quality = capToMaxStandardQuality(items[i].quality)
-		}
+
 	}
+
+}
+
+func agingForLegendaryItems(item *Item) {
+	
+}
+
+func agingForNonLegendaryItems(currentItem *Item) {
+	currentItem.sellIn -= 1
+}
+
+func qualityChangesForAgedBrie(item *Item) {
+	item.quality += standardQualityChange
+	if item.sellIn <= 0 {
+		item.quality += standardQualityChange
+	}
+
+}
+
+func qualityChangesForNormalItems(item *Item) {
+	if item.quality > 0 {
+		item.quality -= standardQualityChange
+	}
+}
+
+func qualityChangesForConjuredItems(item *Item) {
+	if item.quality > 0 {
+		item.quality -= 2
+	}
+}
+
+func qualityChangesForBackstagePasses(item *Item) {
+	item.quality += standardQualityChange
+	if item.sellIn <= 10 {
+		item.quality += standardQualityChange
+	}
+	if item.sellIn <= 5 {
+		item.quality += standardQualityChange
+	}
+}
+
+func qualityChangesForLegendaryItems(item *Item){
 
 }
 
