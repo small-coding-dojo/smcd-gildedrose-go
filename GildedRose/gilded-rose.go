@@ -16,6 +16,7 @@ func UpdateQuality(items []*Item) {
 
 		if currentItem.name == "Aged Brie" {
 			qualityChangesForAgedBrie(currentItem)
+			qualityChangesFroOverdueAgedBrie(currentItem)
 		} else if currentItem.name == "Backstage passes to a TAFKAL80ETC concert" {
 			qualityChangesForBackstagePasses(currentItem)
 		} else if currentItem.name == "Conjured Mana Cake" {
@@ -66,10 +67,12 @@ func agingForNonLegendaryItems(currentItem *Item) {
 
 func qualityChangesForAgedBrie(item *Item) {
 	item.quality += standardQualityChange
+}
+
+func qualityChangesFroOverdueAgedBrie(item *Item) {
 	if item.sellIn <= 0 {
 		item.quality += standardQualityChange
 	}
-
 }
 
 func qualityChangesForNormalItems(item *Item) {
