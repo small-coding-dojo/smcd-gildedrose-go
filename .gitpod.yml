@@ -5,7 +5,7 @@ tasks:
     curl -sL install.mob.sh | sudo sh
 vscode:
   extensions:
-    - ethan-reesor.vscode-go-test-adapter
-    - hbenl.vscode-test-explorer
     - golang.go
     - neonxp.gotools
+    - hbenl.vscode-test-explorer
+    - hbenl.test-adapter-converter
