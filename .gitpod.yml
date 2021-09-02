@@ -1,11 +1,10 @@
+image:
+  file: .gitpod.Dockerfile
 
-tasks:
- - name: Setup
-   init: |
-    curl -sL install.mob.sh | sudo sh
 vscode:
   extensions:
     - golang.go
     - neonxp.gotools
-    - hbenl.vscode-test-explorer
+    - ethan-reesor.vscode-go-test-adapter
     - hbenl.test-adapter-converter
+    - hbenl.vscode-test-explorer
