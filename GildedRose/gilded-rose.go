@@ -66,6 +66,7 @@ func qualityChangesForNormalItems(item *Item) {
 	if (item.sellIn <= 0) && (item.quality > 0) {
 		item.quality -= standardQualityChange
 	}
+
 }
 
 func qualityChangesForConjuredItems(item *Item) {
