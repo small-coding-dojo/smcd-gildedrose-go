@@ -9,35 +9,90 @@ type Item struct {
 
 const standardQualityChange = 1
 
+type QualityStrategy interface {
+	ApplyQualityChanges(item *Item)
+}
+
+func qualityStrategyFor(item *Item) (strategy QualityStrategy) {
+	if isAgedBrie(item) {
+		strategy = AgedBrieQualityStrategy{}
+	} else if isBackstagePass(item) {
+		strategy = BackstagePassesQualityStrategy{}
+	} else if isConjuredItem(item) {
+		strategy = ConjuredItemQualityStrategy{}
+	} else if isLegendaryItem(item) {
+		strategy = LegendaryItemQualityStrategy{}
+	} else {
+		strategy = NormalItemQualityStrategy{}
+	}
+	return
+}
+
+func isAgedBrie(item *Item) bool {
+	return item.name == "Aged Brie"
+}
+
+func isBackstagePass(item *Item) bool {
+	return item.name == "Backstage passes to a TAFKAL80ETC concert"
+}
+
+func isConjuredItem(item *Item) bool {
+	return item.name == "Conjured Mana Cake"
+}
+
+func isLegendaryItem(currentItem *Item) bool {
+	return currentItem.name == "Sulfuras, Hand of Ragnaros"
+}
+
+type AgedBrieQualityStrategy struct{}
+
+func (a AgedBrieQualityStrategy) ApplyQualityChanges(item *Item) {
+	qualityChangesForAgedBrie(item)
+}
+
+type BackstagePassesQualityStrategy struct{}
+
+func (b BackstagePassesQualityStrategy) ApplyQualityChanges(item *Item) {
+	qualityChangesForBackstagePasses(item)
+}
+
+type ConjuredItemQualityStrategy struct {}
+
+func (c ConjuredItemQualityStrategy) ApplyQualityChanges(item *Item) {
+	qualityChangesForConjuredItems(item)
+}
+
+type LegendaryItemQualityStrategy struct {}
+
+func (l LegendaryItemQualityStrategy) ApplyQualityChanges(item *Item) {
+	qualityChangesForLegendaryItems(item)
+}
+
+type NormalItemQualityStrategy struct {}
+
+func (n NormalItemQualityStrategy) ApplyQualityChanges(item *Item) {
+	qualityChangesForNormalItems(item)
+}
+
 func UpdateQuality(items []*Item) {
 	for i := 0; i < len(items); i++ {
 
 		currentItem := items[i]
 
-		if currentItem.name == "Aged Brie" {
-			qualityChangesForAgedBrie(currentItem)
-		} else if currentItem.name == "Backstage passes to a TAFKAL80ETC concert" {
-			qualityChangesForBackstagePasses(currentItem)
-		} else if currentItem.name == "Conjured Mana Cake" {
-			qualityChangesForConjuredItems(currentItem)
-		} else if currentItem.name == "Sulfuras, Hand of Ragnaros" {
-			qualityChangesForLegendaryItems(currentItem)
-		} else {
-			qualityChangesForNormalItems(currentItem)
-		}
+		qualityStrategy := qualityStrategyFor(currentItem)
+		qualityStrategy.ApplyQualityChanges(currentItem)
 
-		if currentItem.name != "Sulfuras, Hand of Ragnaros" {
+		if !isLegendaryItem(currentItem) {
 			capToStandardMaximumQuality(currentItem)
 		}
 
 		// letTimePassBy
-		if currentItem.name == "Sulfuras, Hand of Ragnaros" {
+		if isLegendaryItem(currentItem) {
 			agingForLegendaryItems(currentItem)
 		} else {
 			agingForNonLegendaryItems(currentItem)
 		}
 	}
-
 }
 
 func capToStandardMaximumQuality(item *Item) {
