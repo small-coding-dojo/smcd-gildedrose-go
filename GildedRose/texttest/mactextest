@@ -1,0 +1,2 @@
+# ruby texttest_fixture.rb 30 > texttest/stdout.sut && opendiff texttest/stdout.sut texttest/ThirtyDays/stdout.gr
+go run . 30 > texttest/stdout.sut && opendiff texttest/stdout.sut texttest/ThirtyDays/stdout.gr
