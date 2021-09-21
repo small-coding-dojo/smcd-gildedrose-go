@@ -18,7 +18,6 @@ func UpdateQuality(items []*Item) {
 	}
 }
 
-
 type QualityStrategy interface {
 	IsApplicableFor(item *Item) bool
 	ApplyChangesForOneDay(item *Item)
@@ -80,17 +79,22 @@ func (b BackstagePassesQualityStrategy) IsApplicableFor(item *Item) bool {
 }
 
 func (b BackstagePassesQualityStrategy) ApplyChangesForOneDay(item *Item) {
-	item.quality += standardQualityChange
-	if item.sellIn <= 10 {
-		item.quality += standardQualityChange
-	}
+
+	qualityUpdate := 0
+
 	if item.sellIn <= 5 {
+		item.quality += 2 * standardQualityChange
+	} else if item.sellIn <= 10 {
 		item.quality += standardQualityChange
 	}
+	item.quality += standardQualityChange
 
 	if item.sellIn <= 0 {
 		item.quality = 0
 	}
+
+	item.quality += qualityUpdate
+
 	capToStandardMaximumQuality(item)
 	applyStandardAging(item)
 }
