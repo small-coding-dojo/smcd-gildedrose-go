@@ -82,20 +82,24 @@ func makeWorthless(item *Item) {
 	item.quality = 0
 }
 
-func increaseQualityBy(qualityChange int, item *Item) {
+func increaseItemQualityBy(item *Item, qualityChange int) {
 	item.quality += qualityChange
 }
+func decreaseItemQualityBy(item *Item, qualityChange int) {
+	item.quality -= qualityChange
+}
+
 
 func (b BackstagePassesQualityStrategy) ApplyChangesForOneDay(item *Item) {
 
 	if item.sellIn <= 0 {
 		makeWorthless(item)
 	} else if item.sellIn <= 5 {
-		increaseQualityBy(3, item)
+		increaseItemQualityBy(item, 3)
 	} else if item.sellIn <= 10 {
-		increaseQualityBy(2, item)
+		increaseItemQualityBy(item, 2)
 	} else {
-		increaseQualityBy(1, item)
+		increaseItemQualityBy(item, 1)
 	}
 
 	capToStandardMaximumQuality(item)
@@ -109,11 +113,9 @@ func (c ConjuredItemQualityStrategy) IsApplicableFor(item *Item) bool {
 }
 
 func (c ConjuredItemQualityStrategy) ApplyChangesForOneDay(item *Item) {
-	if item.quality > 0 {
-		item.quality -= 2
-	}
+	item.quality -= 2
 	if (item.sellIn <= 0) && (item.quality > 0) {
-		item.quality -= 2
+		decreaseItemQualityBy(item, 2)
 	}
 	capToStandardMaximumQuality(item)
 	applyStandardAging(item)
