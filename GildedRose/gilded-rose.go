@@ -89,7 +89,6 @@ func decreaseItemQualityBy(item *Item, qualityChange int) {
 	item.quality -= qualityChange
 }
 
-
 func (b BackstagePassesQualityStrategy) ApplyChangesForOneDay(item *Item) {
 
 	if item.sellIn <= 0 {
@@ -113,7 +112,10 @@ func (c ConjuredItemQualityStrategy) IsApplicableFor(item *Item) bool {
 }
 
 func (c ConjuredItemQualityStrategy) ApplyChangesForOneDay(item *Item) {
-	item.quality -= 2
+	// todo: create a test case for a qualitiy change below 0 for ConjuredItems
+	if item.quality > 0 {
+		decreaseItemQualityBy(item, 2)
+	}
 	if (item.sellIn <= 0) && (item.quality > 0) {
 		decreaseItemQualityBy(item, 2)
 	}
@@ -139,10 +141,10 @@ func (n NormalItemQualityStrategy) IsApplicableFor(item *Item) bool {
 
 func (n NormalItemQualityStrategy) ApplyChangesForOneDay(item *Item) {
 	if item.quality > 0 {
-		item.quality -= standardQualityChange
+		decreaseItemQualityBy(item, 1)
 	}
 	if (item.sellIn <= 0) && (item.quality > 0) {
-		item.quality -= standardQualityChange
+		decreaseItemQualityBy(item, 1)
 	}
 	capToStandardMaximumQuality(item)
 	applyStandardAging(item)
