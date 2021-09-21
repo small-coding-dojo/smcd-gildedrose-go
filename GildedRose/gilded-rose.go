@@ -82,9 +82,8 @@ func makeWorthless(item *Item) {
 	item.quality = 0
 }
 
-func increaseQualityByThree(item *Item) {
-	item.quality += 3
-
+func increaseQualityBy(qualityChange int, item *Item) {
+	item.quality += qualityChange
 }
 
 func (b BackstagePassesQualityStrategy) ApplyChangesForOneDay(item *Item) {
@@ -92,11 +91,11 @@ func (b BackstagePassesQualityStrategy) ApplyChangesForOneDay(item *Item) {
 	if item.sellIn <= 0 {
 		makeWorthless(item)
 	} else if item.sellIn <= 5 {
-		increaseQualityByThree(item)
+		increaseQualityBy(3, item)
 	} else if item.sellIn <= 10 {
-		item.quality += 2 * standardQualityChange
+		increaseQualityBy(2, item)
 	} else {
-		item.quality += 1 * standardQualityChange
+		increaseQualityBy(1, item)
 	}
 
 	capToStandardMaximumQuality(item)
