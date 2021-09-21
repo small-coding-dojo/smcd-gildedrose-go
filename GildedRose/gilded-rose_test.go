@@ -163,6 +163,14 @@ func Test_ConjuredItem_specifications(t *testing.T) {
 			Desc:     "'Conjured Mana Cake', degrades by 4 per day after sellin",
 			Input:    Item{itemName, 0, 39},
 			Expected: Item{itemName, -1, 35},
+		},{
+			Desc:     "TODO: rename test -- The Quality of an item is never negative",
+			Input:    Item{itemName, 10, 0},
+			Expected: Item{itemName, 9, 0},
+		},{
+			Desc:     "TODO: this test reveals a bug and - in addition - has a poor name",
+			Input:    Item{itemName, 10, 1},
+			Expected: Item{itemName, 9, 0},
 		},
 	}
 
