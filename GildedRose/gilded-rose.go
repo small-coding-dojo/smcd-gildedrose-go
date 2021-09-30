@@ -68,7 +68,7 @@ func (a AgedBrieQualityStrategy) ApplyChangesForOneDay(item *Item) {
 	if item.sellIn <= 0 {
 		item.quality += standardQualityChange
 	}
-	capToStandardMaximumQuality(item)
+	clampToStandardQuality(item)
 	applyStandardAging(item)
 }
 
@@ -101,7 +101,7 @@ func (b BackstagePassesQualityStrategy) ApplyChangesForOneDay(item *Item) {
 		increaseItemQualityBy(item, 1)
 	}
 
-	capToStandardMaximumQuality(item)
+	clampToStandardQuality(item)
 	applyStandardAging(item)
 }
 
@@ -118,7 +118,7 @@ func (c ConjuredItemQualityStrategy) ApplyChangesForOneDay(item *Item) {
 	if (item.sellIn <= 0) && (item.quality > 0) {
 		decreaseItemQualityBy(item, 2)
 	}
-	capToStandardMaximumQuality(item)
+	clampToStandardQuality(item)
 	applyStandardAging(item)
 }
 
@@ -145,11 +145,23 @@ func (n NormalItemQualityStrategy) ApplyChangesForOneDay(item *Item) {
 	if (item.sellIn <= 0) && (item.quality > 0) {
 		decreaseItemQualityBy(item, 1)
 	}
-	capToStandardMaximumQuality(item)
+
+	capToStandardMaxItemQuality(item)
+	ensureMinimumQualityOfZero(item)
+
 	applyStandardAging(item)
 }
 
-func capToStandardMaximumQuality(item *Item) {
+func clampToStandardQuality(item *Item) {
+	capToStandardMaxItemQuality(item)
+	ensureMinimumQualityOfZero(item)
+}
+
+func ensureMinimumQualityOfZero(item *Item) {
+	item.quality = int(math.Max(0, float64(item.quality)))
+}
+
+func capToStandardMaxItemQuality(item *Item) {
 	item.quality = int(math.Min(50, float64(item.quality)))
 }
 
