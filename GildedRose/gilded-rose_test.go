@@ -16,28 +16,28 @@ func Test_normal_Item_specifications(t *testing.T) {
 
 	testData := []TestStruct{
 		{
-			Desc: "At the end of each day our system lowers both values for every item",
-			Input: Item{"foo", 10, 50},
+			Desc:     "At the end of each day our system lowers both values for every item",
+			Input:    Item{"foo", 10, 50},
 			Expected: Item{"foo", 9, 49},
 		},
 		{
-			Desc: "The Quality of an item is never negative",
-			Input: Item{"foo", 10, 0},
+			Desc:     "The Quality of an item is never negative",
+			Input:    Item{"foo", 10, 0},
 			Expected: Item{"foo", 9, 0},
 		},
 		{
-			Desc: "Once the **sell by date** has passed, Quality degrades twice as fast",
-			Input: Item{"foo", -1, 10},
+			Desc:     "Once the **sell by date** has passed, Quality degrades twice as fast",
+			Input:    Item{"foo", -1, 10},
 			Expected: Item{"foo", -2, 8},
 		},
 		{
-			Desc: "Edge case: SellIn is 0 and Quality degrades twice as fast",
-			Input: Item{"foo", 0, 2},
+			Desc:     "Edge case: SellIn is 0 and Quality degrades twice as fast",
+			Input:    Item{"foo", 0, 2},
 			Expected: Item{"foo", -1, 0},
 		},
 		{
-			Desc: "Edge case: Quality degrades twice as fast AND quality of an item is never negative",
-			Input: Item{"foo", -1, 1},
+			Desc:     "Edge case: Quality degrades twice as fast AND quality of an item is never negative",
+			Input:    Item{"foo", -1, 1},
 			Expected: Item{"foo", -2, 0},
 		},
 	}
@@ -49,22 +49,22 @@ func Test_Aged_Brie_specifications(t *testing.T) {
 
 	testData := []TestStruct{
 		{
-			Desc: "\"Aged Brie\" actually increases in Quality the older it gets",
-			Input: Item{"Aged Brie", 10, 10},
+			Desc:     "\"Aged Brie\" actually increases in Quality the older it gets",
+			Input:    Item{"Aged Brie", 10, 10},
 			Expected: Item{"Aged Brie", 9, 11},
 		},
 		{
-			Desc: "undocumented Requirement?",
-			Input: Item{"Aged Brie", -1, 10},
+			Desc:     "undocumented Requirement?",
+			Input:    Item{"Aged Brie", -1, 10},
 			Expected: Item{"Aged Brie", -2, 12},
 		},
 		{
-			Desc: "Quality of an item is never more than 50",
-			Input: Item{"Aged Brie", 10, 50},
+			Desc:     "Quality of an item is never more than 50",
+			Input:    Item{"Aged Brie", 10, 50},
 			Expected: Item{"Aged Brie", 9, 50},
-		},{
-			Desc: "Quality of an item is never more than 50, even if the quality should increase by 2",
-			Input: Item{"Aged Brie", -1, 49},
+		}, {
+			Desc:     "Quality of an item is never more than 50, even if the quality should increase by 2",
+			Input:    Item{"Aged Brie", -1, 49},
 			Expected: Item{"Aged Brie", -2, 50},
 		},
 	}
@@ -77,16 +77,16 @@ func Test_Sulfuras_specifications(t *testing.T) {
 
 	testData := []TestStruct{
 		{
-			Desc: "Sulfuras never has to be sold",
-			Input: Item{"Sulfuras, Hand of Ragnaros", 10, 80},
+			Desc:     "Sulfuras never has to be sold",
+			Input:    Item{"Sulfuras, Hand of Ragnaros", 10, 80},
 			Expected: Item{"Sulfuras, Hand of Ragnaros", 10, 80}},
 		{
-			Desc: "Sulfuras quality is always 80",
-			Input: Item{"Sulfuras, Hand of Ragnaros", 10, 80},
+			Desc:     "Sulfuras quality is always 80",
+			Input:    Item{"Sulfuras, Hand of Ragnaros", 10, 80},
 			Expected: Item{"Sulfuras, Hand of Ragnaros", 10, 80}},
 		{
-			Desc: "Sulfuras never decreases in quality",
-			Input: Item{"Sulfuras, Hand of Ragnaros", 10, 80},
+			Desc:     "Sulfuras never decreases in quality",
+			Input:    Item{"Sulfuras, Hand of Ragnaros", 10, 80},
 			Expected: Item{"Sulfuras, Hand of Ragnaros", 10, 80}},
 	}
 
@@ -112,19 +112,19 @@ func Test_Backstage_specifications(t *testing.T) {
 			Desc:     "'Backstage passes', exactly 10 days left increase quality by 2 per day",
 			Input:    Item{itemName, 10, 39},
 			Expected: Item{itemName, 9, 41},
-		},{
+		}, {
 			Desc:     "'Backstage passes', exactly 6 days left increase quality by 2 per day",
 			Input:    Item{itemName, 6, 39},
 			Expected: Item{itemName, 5, 41},
-		},{
+		}, {
 			Desc:     "'Backstage passes', exactly 5 days left increase quality by 3 per day",
 			Input:    Item{itemName, 5, 39},
 			Expected: Item{itemName, 4, 42},
-		},{
+		}, {
 			Desc:     "'Backstage passes', exactly 1 days left increase quality by 3 per day",
 			Input:    Item{itemName, 1, 39},
 			Expected: Item{itemName, 0, 42},
-		},{
+		}, {
 			Desc:     "'Backstage passes', exactly 0 days left decrease quality to 0",
 			Input:    Item{itemName, 0, 39},
 			Expected: Item{itemName, -1, 0},
@@ -136,11 +136,11 @@ func Test_Backstage_specifications(t *testing.T) {
 			Desc:     "'Backstage passes', exactly 1 days left does not exceed 50 with 3 day increment",
 			Input:    Item{itemName, 1, 48},
 			Expected: Item{itemName, 0, 50},
-		},{
+		}, {
 			Desc:     "'Backstage passes', exactly 6 days left does not exceed 50 with 2 day increment",
 			Input:    Item{itemName, 6, 49},
 			Expected: Item{itemName, 5, 50},
-		},{
+		}, {
 			Desc:     "'Backstage passes', exactly 11 days left does not exceed 50 with 1 day increment",
 			Input:    Item{itemName, 11, 50},
 			Expected: Item{itemName, 10, 50},
@@ -159,16 +159,16 @@ func Test_ConjuredItem_specifications(t *testing.T) {
 			Desc:     "'Conjured Mana Cake', decrades twice as fast",
 			Input:    Item{itemName, 12, 39},
 			Expected: Item{itemName, 11, 37},
-		},{
+		}, {
 			Desc:     "'Conjured Mana Cake', degrades by 4 per day after sellin",
 			Input:    Item{itemName, 0, 39},
 			Expected: Item{itemName, -1, 35},
-		},{
-			Desc:     "TODO: rename test -- The Quality of an item is never negative",
+		}, {
+			Desc:     "'Conjured Mana Cake', with quality zero does not degrade further",
 			Input:    Item{itemName, 10, 0},
 			Expected: Item{itemName, 9, 0},
-		},{
-			Desc:     "TODO: this test reveals a bug and - in addition - has a poor name",
+		}, {
+			Desc:     "'Conjured Mana Cake', with quality one degrades to zero",
 			Input:    Item{itemName, 10, 1},
 			Expected: Item{itemName, 9, 0},
 		},
