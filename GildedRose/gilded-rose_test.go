@@ -172,11 +172,10 @@ func Test_ConjuredItem_specifications(t *testing.T) {
 			Input:    Item{itemName, 10, 1},
 			Expected: Item{itemName, 9, 0},
 		}, {
-			Desc:     "'Conjured Mana Cake', todo fix name ",
-			Input:    Item{itemName, 10, 3},
-			Expected: Item{itemName, 9, 0},
+			Desc:     "'Conjured Mana Cake', after sellin does not degrade below zero",
+			Input:    Item{itemName, -1, 3},
+			Expected: Item{itemName, -2, 0},
 		},
-		// test for selinn <= 0 and current value = 3
 	}
 
 	CheckEffectsOnItemAfterOneDay(t, testData)
