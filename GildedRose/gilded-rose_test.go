@@ -171,6 +171,10 @@ func Test_ConjuredItem_specifications(t *testing.T) {
 			Desc:     "'Conjured Mana Cake', with quality one degrades to zero",
 			Input:    Item{itemName, 10, 1},
 			Expected: Item{itemName, 9, 0},
+		}, {
+			Desc:     "'Conjured Mana Cake', todo fix name ",
+			Input:    Item{itemName, 10, 3},
+			Expected: Item{itemName, 9, 0},
 		},
 		// test for selinn <= 0 and current value = 3
 	}
