@@ -172,6 +172,7 @@ func Test_ConjuredItem_specifications(t *testing.T) {
 			Input:    Item{itemName, 10, 1},
 			Expected: Item{itemName, 9, 0},
 		},
+		// test for selinn <= 0 and current value = 3
 	}
 
 	CheckEffectsOnItemAfterOneDay(t, testData)

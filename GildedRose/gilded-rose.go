@@ -112,7 +112,6 @@ func (c ConjuredItemQualityStrategy) IsApplicableFor(item *Item) bool {
 }
 
 func (c ConjuredItemQualityStrategy) ApplyChangesForOneDay(item *Item) {
-	// todo: create a test case for a quality change below 0 for ConjuredItems
 	if item.quality > 0 {
 		decreaseItemQualityBy(item, 2)
 	}
