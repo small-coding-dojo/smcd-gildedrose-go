@@ -112,6 +112,7 @@ func (c ConjuredItemQualityStrategy) IsApplicableFor(item *Item) bool {
 }
 
 func (c ConjuredItemQualityStrategy) ApplyChangesForOneDay(item *Item) {
+
 	if item.quality > 0 {
 		decreaseItemQualityBy(item, 2)
 	}
@@ -139,16 +140,25 @@ func (n NormalItemQualityStrategy) IsApplicableFor(item *Item) bool {
 }
 
 func (n NormalItemQualityStrategy) ApplyChangesForOneDay(item *Item) {
-	if item.quality > 0 {
-		decreaseItemQualityBy(item, 1)
+	requiredQualityChange := standardQualityChange;
+	if sellinDateHasPassedFor(item) {
+		requiredQualityChange = 2 * requiredQualityChange
 	}
-	if (item.sellIn <= 0) && (item.quality > 0) {
-		decreaseItemQualityBy(item, 1)
+	if qualityWouldDegradeBelowZero(item, requiredQualityChange) {
+		requiredQualityChange = item.quality
 	}
 
-	limitToStandardQualityBoundaries(item)
+	decreaseItemQualityBy(item, requiredQualityChange)
 
 	applyStandardAging(item)
+}
+
+func qualityWouldDegradeBelowZero(item *Item, degradeQualityStep int) bool {
+	return item.quality < degradeQualityStep
+}
+
+func sellinDateHasPassedFor(item *Item) bool {
+	return item.sellIn <= 0
 }
 
 func limitToStandardQualityBoundaries(item *Item) {
